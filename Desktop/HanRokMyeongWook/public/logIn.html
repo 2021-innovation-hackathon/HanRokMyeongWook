@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    @font-face {
+    font-family: 'WandohopeB';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/WandohopeB.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+   }
+  </style>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="img/logo/logo.png" rel="icon">
+  <title>너나들이 - 로그인</title>
+  <link href="css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/ruang-admin.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body class="bg-gradient-login">
+  <!-- Sidebar -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <!-- TopBar -->
+      <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+        
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+          <div class="sidebar-brand-icon">
+            <img src="css/logo.png" width="40">
+          </div>
+          <div class="sidebar-brand-text mx-3" style="color:#fff; font-size: 1.5em; font-family: 'WandohopeB';" >너나들이</div>
+          
+        </a>
+      </nav>
+      <!-- Topbar -->
+  <!-- Login Content -->
+  <div class="container-login">
+    <div class="row justify-content-center">
+      <div class="col-xl-6 col-lg-12 col-md-9">
+        <div class="card shadow-sm my-5">
+          <div class="card-body p-0">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="login-form">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">로그인</h1>
+                  </div>
+                  <form class="user">
+                    <div class="form-group">
+                      <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
+                        placeholder="이메일을 입력하세요">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" id="exampleInputPassword" placeholder="비밀번호를 입력하시오.">
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox small" style="line-height: 1.5rem;">
+                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <a class="btn btn-default login" onClick="checkuser();">로그인</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Login Content -->
+  <!-- <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="js/ruang-admin.min.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+  <script>
+    var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+    var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+    var userInfo; //가입한 유저의 정보. object 타입
+    //파이어 베이스 초기화 코드
+    var config = {
+        apiKey: "AIzaSyDhDAsu763cvxiR7cyHxYm5onM8Q0AwR6Y",
+        authDomain: "jnu-test.firebaseapp.com",
+                      projectId: "jnu-test",
+                      storageBucket: "jnu-test.appspot.com",
+                      messagingSenderId: "1085946242507",
+                      appId: "1:1085946242507:web:4f9232c942ccab7ea0424e",
+                      measurementId: "G-N8GDG17QZC"
+    };
+    firebase.initializeApp(config);
+
+
+ 
+    firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
+    firebaseDatabase = firebase.firestore(); //파이어베이스 데이터베이스 객체
+ 
+    
+ 
+    function checkuser()
+    {
+      //제이쿼리를 사용한다.
+    $(document).ready(function()
+    {
+      
+      //가입버튼 눌렀을 때
+      $(document).on('click','.login',function(){
+        
+        //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다. 
+        var email = $('#email').val();
+        var password = $('#pwd').val();
+        alert("로그인 버튼 눌렸음");
+    
+    //파이어베이스 이메일 로그인 함수
+    firebaseEmailAuth.signInWithEmailAndPassword(email, password)
+   .then(function(firebaseUser) {
+ 
+       //성공하면 firebaseUser에 유저 정보 값이 담겨 넘어온다.
+       loginSuccess(firebaseUser);
+ 
+   })
+  .catch(function(error) {
+       // 실패했을 때 에러 처리
+       alert(error);
+       alert("로그인 실패");
+  });
+    
+      });
+    });
+    
+    //로그인 성공했을 때
+    function loginSuccess(firebaseUser){
+       alert("로그인 성공");
+ 
+  //   //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
+  //  firebaseDatabase.ref("users/"+firebaseUser.uid).once('value').then(function(snapshot){
+  //       //alert(snapshot.val().name)
+  //   });
+
+    //메인 페이지로 이동
+    
+    window.location.href = "/main.html"
+
+
+    var user = firebase.auth().currentUser;
+    console.log('이메일: ',user.email);
+
+   
+
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  .then(() => {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  })
+  .catch((error) => {
+   
+    var errorCode = error.code;
+    var errorMessage = error.message;
+  });
+    }
+    }
+ 
+    
+    </script>
+
+</body>
+
+</html>
