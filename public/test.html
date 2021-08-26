@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- <base href="/"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <label for="pass" class="label">Email Address</label>
+    <input id="new_email" type="text"><br>
+    <label for="pass" class="label">Password</label>
+    <input id="new_pw_1" type="password" class="input" data-type="password"><br>
+    <label for="pass" class="label">Repeat Password</label>
+    <input id="new_pw_2" type="password" class="input" data-type="password"><br>
+    <input type="button" onclick="newuser();" value="제출">
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+
+
+
+    <script>
+        const collection = "Users"
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDhDAsu763cvxiR7cyHxYm5onM8Q0AwR6Y",
+          authDomain: "jnu-test.firebaseapp.com",
+          projectId: "jnu-test",
+          storageBucket: "jnu-test.appspot.com",
+          messagingSenderId: "1085946242507",
+          appId: "1:1085946242507:web:4f9232c942ccab7ea0424e",
+          measurementId: "G-N8GDG17QZC"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // require("firebase/auth");
+        // require("firebase/firestore");
+        // firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        function newuser() {
+            email = document.getElementById('new_email').value
+            new_pw_1 = document.getElementById('new_pw_1').value
+            new_pw_2 = document.getElementById('new_pw_2').value
+            if (new_pw_1 != new_pw_2) {
+                alert("확인 비밀번호가 다릅니다.")
+            } else {     
+                
+                //입력받은 데이터 db에 넣는거
+                const data = {
+                    name: '김정욱',
+                    email: email,
+                    pw: new_pw_1
+                    };
+
+                const res = db.collection(collection).doc(email).set(data);
+
+
+
+
+
+
+
+                firebase.auth().createUserWithEmailAndPassword(email, new_pw_2)
+                    .then(() => {
+                        alert('회원가입이 완료되었습니다.')
+                    })
+                    .catch(function (error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        alert(error.code)
+                    });
+            }
+        }
+       
+    </script>
+    <!-- <script src="./js/test.js" defer></script> -->
+
+</body>
+
+</html>
